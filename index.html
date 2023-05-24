@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+</head>
+<body>
+    <div id="chart"></div>
+    <button onclick="removeAllTraces()">Remove All</button>
+    <button onclick="showAllTraces()">Show All</button>
+    <button onclick="enableAlexa()">Enable Alexa dyes</button>
+
+    <script>
+        function readDataFromFile(filePath) {
+            return fetch(filePath)
+                .then(response => response.text())
+                .then(data => {
+                    const lines = data.split('\n');
+                    const xData = [];
+                    const yData = [];
+
+                    lines.forEach(line => {
+                        const [x, y] = line.split(',');
+                        xData.push(x);
+                        yData.push(parseFloat(y));
+                    });
+
+                    return { x: xData, y: yData };
+                })
+                .catch(error => {
+                    console.error('Error fetching data:', error);
+                });
+        }
+
+        var layout = {
+          title: '2-p cross section',
+              xaxis: {
+                title: {
+                    text: 'Wavelength (nm)',
+                },
+                range: [750, 1020],
+                tickangle: -45
+            },
+            yaxis: {
+                title: {
+                    text: 'GM',
+                },
+            },
+            showlegend: true,
+          };
+
+const files = [
+  { filename: 'data/zipfel/Alexa488.csv', name: 'AF488', color: 'rgb(49,130,189)' },
+  { filename: 'data/zipfel/Alexa568.csv', name: 'AF568', color: 'rgb(255,127,14)' },
+  { filename: 'data/zipfel/Alexa594.csv', name: 'AF594', color: 'rgb(255,127,14)' },
+  { filename: 'data/zipfel/eGFP.csv', name: 'eGFP', color: 'rgb(44,160,44)' },
+  { filename: 'data/zipfel/YFP.csv', name: 'YFP', color: 'rgb(230,220,10)' },
+  { filename: 'data/zipfel/dsRED.csv', name: 'dsRED', color: 'rgb(200,20,44)' },
+];
+
+
+const promises = [];
+
+// Read data from each file and store the promises
+for (const file of files) {
+  const promise = readDataFromFile(file.filename)
+    .then(data => {
+      const trace = {
+        x: data.x,
+        y: data.y,
+        type: 'line',
+        name: file.name,
+        marker: {
+          color: file.color,
+          opacity: 0.7,
+        }
+      };
+      return trace;
+    });
+
+  promises.push(promise);
+}
+
+// Wait for all promises to be resolved
+Promise.all(promises)
+  .then(traces => {
+    // Plot all the traces
+    Plotly.newPlot('chart', traces, layout);
+  })
+  .catch(error => {
+    console.error('Error reading data:', error);
+  });
+
+
+
+    function removeAllTraces() {
+      // Get the current number of traces
+      const numTraces = document.getElementById('chart').data.length;
+
+      // Update the trace visibility individually
+      for (let i = 0; i < numTraces; i++) {
+        Plotly.restyle('chart', 'visible', 'legendonly', [i]);
+      }
+    }
+
+    function showAllTraces() {
+      const chart = document.getElementById('chart');
+      const numTraces = chart.data.length;
+
+      for (let i = 0; i < numTraces; i++) {
+        Plotly.restyle(chart, 'visible', true, [i]);
+      }
+    }
+
+
+    function enableAlexa() {
+      // Get the current number of traces
+      const numTraces = document.getElementById('chart').data.length;
+
+      // Create an array of false values with the same length as the number of traces
+      const visibility = new Array(numTraces).fill(false);
+
+      // Enable only elements 1 and 3 by setting their corresponding indices to true
+      visibility[0] = true;
+      visibility[1] = true;
+      visibility[2] = true;
+      // Update the trace visibility individually
+      for (let i = 0; i < numTraces; i++) {
+        Plotly.restyle('chart', 'visible', visibility[i], [i]);
+      }
+    }
+
+    </script>
+</body>
+</html>
