@@ -8,11 +8,16 @@
     <button onclick="removeAllTraces()">Remove All</button>
     <button onclick="showAllTraces()">Show All</button>
     <button onclick="enableAlexa()">Enable Alexa dyes</button>
+    <button onclick="enableZipfel()">Enable Zipfel data</button>
+    <button onclick="enableDrobizhev()">Enable Drovizhev data</button>
 
     <p>
       Data come from the <a href="http://www.drbio.cornell.edu/cross_sections.html">Zipfel Lab</a> and from papers by Mikhail Drobizhev.
       Mikhail kindly provided CSV files.
       Data are stored in named sub-directories so the origin of all data are obvious.
+      Some curves are obtained from more than one source and there are differences in the way data are acquired.
+      Consequently, the origin of each dye is indicated by an initial.
+      For example "eGFP (Z)" comes from the Zipfel lab and "eGFP (D)" is from Drobizhev.
     </p>
     <script>
         function readDataFromFile(filePath) {
@@ -49,19 +54,24 @@
                 title: {
                     text: 'GM',
                 },
+                range: [0,250],
             },
             showlegend: true,
           };
 
 const files = [
-  { filename: 'data/zipfel/Alexa488.csv', name: 'AF488', color: 'rgb(49,130,189)' },
-  { filename: 'data/zipfel/Alexa568.csv', name: 'AF568', color: 'rgb(255,127,14)' },
-  { filename: 'data/zipfel/Alexa594.csv', name: 'AF594', color: 'rgb(255,127,14)' },
-  { filename: 'data/zipfel/eGFP.csv', name: 'eGFP', color: 'rgb(44,160,44)' },
-  { filename: 'data/zipfel/YFP.csv', name: 'YFP', color: 'rgb(230,220,10)' },
-  { filename: 'data/zipfel/dsRED.csv', name: 'dsRED', color: 'rgb(200,20,44)' },
-  { filename: 'data/drobizhev/tdTomato_w.csv', name: 'dsRED', color: 'rgb(200,20,44)' },
-];
+  { filename: 'data/zipfel/Alexa488.csv', name: 'AF488 (Z)', color: 'rgb(49,130,189)' },
+  { filename: 'data/zipfel/Alexa568.csv', name: 'AF568 (Z)', color: 'rgb(255,127,14)' },
+  { filename: 'data/zipfel/Alexa594.csv', name: 'AF594 (Z)', color: 'rgb(255,127,14)' },
+  { filename: 'data/zipfel/eGFP.csv', name: 'eGFP (Z)', color: 'rgb(44,160,44)' },
+  { filename: 'data/zipfel/YFP.csv', name: 'YFP (Z)', color: 'rgb(230,220,10)' },
+  { filename: 'data/zipfel/dsRED.csv', name: 'dsRED (Z)', color: 'rgb(200,20,44)' },
+  { filename: 'data/drobizhev/EBFP2_0_w.csv', name: 'eBFP (D)', color: 'rgb(0,0,230)' },
+  { filename: 'data/drobizhev/EGFP_average_w.csv', name: 'eGFP (D)', color: 'rgb(44,160,44)' },
+  { filename: 'data/drobizhev/ECFP_w.csv', name: 'eCFP (D)', color: 'rgb(10,190,194)' },
+  { filename: 'data/drobizhev/citrine_w.csv', name: 'citrine_w (D)', color: 'rgb(0,190,44)' },
+  { filename: 'data/drobizhev/tdTomato_w.csv', name: 'tdTomato (D)', color: 'rgb(200,50,44)' },
+  { filename: 'data/drobizhev/mCherry_w.csv', name: 'mCherry (D)', color: 'rgb(255, 192, 203)' },];
 
 
 const promises = [];
@@ -119,7 +129,6 @@ Promise.all(promises)
 
 
     function enableAlexa() {
-      // Get the current number of traces
       const numTraces = document.getElementById('chart').data.length;
 
       // Create an array of false values with the same length as the number of traces
@@ -129,6 +138,43 @@ Promise.all(promises)
       visibility[0] = true;
       visibility[1] = true;
       visibility[2] = true;
+      // Update the trace visibility individually
+      for (let i = 0; i < numTraces; i++) {
+        Plotly.restyle('chart', 'visible', visibility[i], [i]);
+      }
+    }
+
+    function enableDrobizhev() {
+      const numTraces = document.getElementById('chart').data.length;
+
+      // Create an array of false values with the same length as the number of traces
+      const visibility = new Array(numTraces).fill(false);
+
+      // Enable only elements 1 and 3 by setting their corresponding indices to true
+      visibility[6] = true;
+      visibility[7] = true;
+      visibility[8] = true;
+      visibility[9] = true;
+      visibility[10] = true;
+      visibility[11] = true;
+      // Update the trace visibility individually
+      for (let i = 0; i < numTraces; i++) {
+        Plotly.restyle('chart', 'visible', visibility[i], [i]);
+      }
+    }
+    function enableZipfel() {
+      const numTraces = document.getElementById('chart').data.length;
+
+      // Create an array of false values with the same length as the number of traces
+      const visibility = new Array(numTraces).fill(false);
+
+      // Enable only elements 1 and 3 by setting their corresponding indices to true
+      visibility[0] = true;
+      visibility[1] = true;
+      visibility[2] = true;
+      visibility[3] = true;
+      visibility[4] = true;
+      visibility[5] = true;
       // Update the trace visibility individually
       for (let i = 0; i < numTraces; i++) {
         Plotly.restyle('chart', 'visible', visibility[i], [i]);
