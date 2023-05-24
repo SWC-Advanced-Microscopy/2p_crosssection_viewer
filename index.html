@@ -9,6 +9,11 @@
     <button onclick="showAllTraces()">Show All</button>
     <button onclick="enableAlexa()">Enable Alexa dyes</button>
 
+    <p>
+      Data come from the <a href="http://www.drbio.cornell.edu/cross_sections.html">Zipfel Lab</a> and from papers by Mikhail Drobizhev.
+      Mikhail kindly provided CSV files.
+      Data are stored in named sub-directories so the origin of all data are obvious.
+    </p>
     <script>
         function readDataFromFile(filePath) {
             return fetch(filePath)
@@ -55,6 +60,7 @@ const files = [
   { filename: 'data/zipfel/eGFP.csv', name: 'eGFP', color: 'rgb(44,160,44)' },
   { filename: 'data/zipfel/YFP.csv', name: 'YFP', color: 'rgb(230,220,10)' },
   { filename: 'data/zipfel/dsRED.csv', name: 'dsRED', color: 'rgb(200,20,44)' },
+  { filename: 'data/drobizhev/tdTomato_w.csv', name: 'dsRED', color: 'rgb(200,20,44)' },
 ];
 
 
