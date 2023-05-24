@@ -1,6 +1,12 @@
 <!DOCTYPE html>
 <html>
 <head>
+    <style>
+      /* Define CSS styles */
+      p {
+        font-family: Arial, sans-serif;
+      }
+    </style>
     <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
 </head>
 <body>
@@ -14,11 +20,17 @@
     <p>
       Data come from the <a href="http://www.drbio.cornell.edu/cross_sections.html">Zipfel Lab</a> and from papers by Mikhail Drobizhev.
       Mikhail kindly provided CSV files.
-      Data are stored in named sub-directories so the origin of all data are obvious.
       Some curves are obtained from more than one source and there are differences in the way data are acquired.
       Consequently, the origin of each dye is indicated by an initial.
       For example "eGFP (Z)" comes from the Zipfel lab and "eGFP (D)" is from Drobizhev.
     </p>
+    <p>
+      In the code repository, data are stored in named sub-directories so the origin of all data are obvious.
+    </p>
+    <p>
+      The code underlying this page <a href="https://github.com/raacampbell/2p_crosssection_viewer">can be found here</a>.
+    </p>
+
     <script>
         function readDataFromFile(filePath) {
             return fetch(filePath)
@@ -42,19 +54,25 @@
         }
 
         var layout = {
-          title: '2-p cross section',
+          title: '2-p cross sections of commonly used dyes',
               xaxis: {
                 title: {
                     text: 'Wavelength (nm)',
                 },
+                mirror: true,
+                showline: true,
                 range: [750, 1020],
-                tickangle: -45
+                tickangle: -45,
+                ticks:'outside',
             },
             yaxis: {
                 title: {
                     text: 'GM',
                 },
+                mirror: true,
+                showline: true,
                 range: [0,250],
+                ticks:'outside',
             },
             showlegend: true,
           };
