@@ -18,17 +18,22 @@
     <button onclick="enableDrobizhev()">Enable Drovizhev data</button>
 
     <p>
+      These curves show the two-photon absorption cross-sections of commonly used dyes.
+      The units are in Goeppert-Mayers (GM), named after Maria Goeppert-Mayer, the discoverer of the 2-photon effect.
+    </p>
+
+    <p>
       Data come from the <a href="http://www.drbio.cornell.edu/cross_sections.html">Zipfel Lab</a> and from papers by Mikhail Drobizhev.
       Mikhail kindly provided CSV files.
-      Some curves are obtained from more than one source and there are differences in the way data are acquired.
-      Consequently, the origin of each dye is indicated by an initial.
+      In general the data from Zipfel yield larger GM values than those from Drobizhev.
+      Likely this is due to preparation differences.
+      Care must be taken in comparing across datasets and so the origin of each cruve is indicated by an initial.
       For example "eGFP (Z)" comes from the Zipfel lab and "eGFP (D)" is from Drobizhev.
     </p>
-    <p>
-      In the code repository, data are stored in named sub-directories so the origin of all data are obvious.
-    </p>
+
     <p>
       The code underlying this page <a href="https://github.com/raacampbell/2p_crosssection_viewer">can be found here</a>.
+      The curves are stored in named sub-directories so their origin is clear.
     </p>
 
     <h3>References</h3>
