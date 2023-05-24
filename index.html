@@ -6,17 +6,25 @@
       body {
         font-family: Arial, sans-serif;
       }
+      html, body {
+      height: 100%;
+      margin: 10px;
+      padding: 10px;
+    }
     </style>
     <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
 </head>
 <body>
-    <div id="chart"></div>
+    <div style="position: relative; display: inline-block; width: 90%; height: 85vh;" id="chart"></div>
+    <br />
     <button onclick="removeAllTraces()">Remove All</button>
     <button onclick="showAllTraces()">Show All</button>
     <button onclick="enableAlexa()">Enable Alexa dyes</button>
     <button onclick="enableZipfel()">Enable Zipfel data</button>
     <button onclick="enableDrobizhev()">Enable Drovizhev data</button>
 
+
+    <div>
     <p>
       These curves show the two-photon absorption cross-sections of commonly used dyes.
       The units are in Goeppert-Mayers (GM), named after Maria Goeppert-Mayer, the discoverer of the 2-photon effect.
@@ -38,10 +46,12 @@
 
     <h3>References</h3>
     <ul>
-      <li><a href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC4772972/?report=reader">Drobizhev, 2011</a>
+      <li><a href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC4772972/?report=reader">Drobizhev, 2011</a></li>
     </ul>
-
+    </div>
     <script>
+
+        // Function for reading spectra from csv file
         function readDataFromFile(filePath) {
             return fetch(filePath)
                 .then(response => response.text())
@@ -63,6 +73,7 @@
                 });
         }
 
+        // Plot properties
         var layout = {
           title: '2-p cross sections of commonly used dyes',
               xaxis: {
@@ -87,55 +98,58 @@
             showlegend: true,
           };
 
-const files = [
-  { filename: 'data/zipfel/Alexa488.csv', name: 'AF488 (Z)', color: 'rgb(49,130,189)' },
-  { filename: 'data/zipfel/Alexa568.csv', name: 'AF568 (Z)', color: 'rgb(255,127,14)' },
-  { filename: 'data/zipfel/Alexa594.csv', name: 'AF594 (Z)', color: 'rgb(255,127,14)' },
-  { filename: 'data/zipfel/eGFP.csv', name: 'eGFP (Z)', color: 'rgb(44,160,44)' },
-  { filename: 'data/zipfel/YFP.csv', name: 'YFP (Z)', color: 'rgb(230,220,10)' },
-  { filename: 'data/zipfel/dsRED.csv', name: 'dsRED (Z)', color: 'rgb(200,20,44)' },
-  { filename: 'data/drobizhev/EBFP2_0_w.csv', name: 'eBFP (D)', color: 'rgb(0,0,230)' },
-  { filename: 'data/drobizhev/EGFP_average_w.csv', name: 'eGFP (D)', color: 'rgb(44,160,44)' },
-  { filename: 'data/drobizhev/ECFP_w.csv', name: 'eCFP (D)', color: 'rgb(10,190,194)' },
-  { filename: 'data/drobizhev/citrine_w.csv', name: 'citrine_w (D)', color: 'rgb(0,190,44)' },
-  { filename: 'data/drobizhev/tdTomato_w.csv', name: 'tdTomato (D)', color: 'rgb(200,50,44)' },
-  { filename: 'data/drobizhev/mCherry_w.csv', name: 'mCherry (D)', color: 'rgb(255, 192, 203)' },];
-
-
-const promises = [];
-
-// Read data from each file and store the promises
-for (const file of files) {
-  const promise = readDataFromFile(file.filename)
-    .then(data => {
-      const trace = {
-        x: data.x,
-        y: data.y,
-        type: 'line',
-        name: file.name,
-        marker: {
-          color: file.color,
-          opacity: 0.7,
-        }
-      };
-      return trace;
-    });
-
-  promises.push(promise);
-}
-
-// Wait for all promises to be resolved
-Promise.all(promises)
-  .then(traces => {
-    // Plot all the traces
-    Plotly.newPlot('chart', traces, layout);
-  })
-  .catch(error => {
-    console.error('Error reading data:', error);
-  });
+      // Files to read, their names, and colours
+      const files = [
+        { filename: 'data/zipfel/Alexa488.csv', name: 'AF488 (Z)', color: 'rgb(49,130,189)' },
+        { filename: 'data/zipfel/Alexa568.csv', name: 'AF568 (Z)', color: 'rgb(255,127,14)' },
+        { filename: 'data/zipfel/Alexa594.csv', name: 'AF594 (Z)', color: 'rgb(255,127,14)' },
+        { filename: 'data/zipfel/eGFP.csv', name: 'eGFP (Z)', color: 'rgb(44,160,44)' },
+        { filename: 'data/zipfel/YFP.csv', name: 'YFP (Z)', color: 'rgb(230,220,10)' },
+        { filename: 'data/zipfel/dsRED.csv', name: 'dsRED (Z)', color: 'rgb(200,20,44)' },
+        { filename: 'data/drobizhev/EBFP2_0_w.csv', name: 'eBFP (D)', color: 'rgb(0,0,230)' },
+        { filename: 'data/drobizhev/EGFP_average_w.csv', name: 'eGFP (D)', color: 'rgb(44,160,44)' },
+        { filename: 'data/drobizhev/ECFP_w.csv', name: 'eCFP (D)', color: 'rgb(10,190,194)' },
+        { filename: 'data/drobizhev/citrine_w.csv', name: 'citrine_w (D)', color: 'rgb(0,190,44)' },
+        { filename: 'data/drobizhev/tdTomato_w.csv', name: 'tdTomato (D)', color: 'rgb(200,50,44)' },
+        { filename: 'data/drobizhev/mCherry_w.csv', name: 'mCherry (D)', color: 'rgb(255, 192, 203)' },];
 
 
 
+      const promises = [];
+
+      // Read data from each file and store the promises
+      for (const file of files) {
+        const promise = readDataFromFile(file.filename)
+          .then(data => {
+            const trace = {
+              x: data.x,
+              y: data.y,
+              type: 'line',
+              name: file.name,
+              marker: {
+                color: file.color,
+                opacity: 0.7,
+              }
+            };
+            return trace;
+          });
+
+        promises.push(promise);
+      }
+
+    // Wait for all promises to be resolved
+    Promise.all(promises)
+      .then(traces => {
+        // Plot all the traces
+        Plotly.newPlot('chart', traces, layout);
+      })
+      .catch(error => {
+        console.error('Error reading data:', error);
+      });
+
+
+
+    // The following functions define button behavior
     function removeAllTraces() {
       // Get the current number of traces
       const numTraces = document.getElementById('chart').data.length;
@@ -174,11 +188,7 @@ Promise.all(promises)
 
     function enableDrobizhev() {
       const numTraces = document.getElementById('chart').data.length;
-
-      // Create an array of false values with the same length as the number of traces
       const visibility = new Array(numTraces).fill(false);
-
-      // Enable only elements 1 and 3 by setting their corresponding indices to true
       visibility[6] = true;
       visibility[7] = true;
       visibility[8] = true;
@@ -192,11 +202,7 @@ Promise.all(promises)
     }
     function enableZipfel() {
       const numTraces = document.getElementById('chart').data.length;
-
-      // Create an array of false values with the same length as the number of traces
       const visibility = new Array(numTraces).fill(false);
-
-      // Enable only elements 1 and 3 by setting their corresponding indices to true
       visibility[0] = true;
       visibility[1] = true;
       visibility[2] = true;
