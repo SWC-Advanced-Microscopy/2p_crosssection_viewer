@@ -65,18 +65,18 @@
 
       // Files to read, their names, and colors
       const files = [
-        { filename: 'data/zipfel/Alexa488.csv', name: 'AF488 (Z)', color: 'rgb(49,130,189)' },
-        { filename: 'data/zipfel/Alexa568.csv', name: 'AF568 (Z)', color: 'rgb(255,127,14)' },
-        { filename: 'data/zipfel/Alexa594.csv', name: 'AF594 (Z)', color: 'rgb(255,127,14)' },
-        { filename: 'data/zipfel/eGFP.csv', name: 'eGFP (Z)', color: 'rgb(44,160,44)' },
-        { filename: 'data/zipfel/YFP.csv', name: 'YFP (Z)', color: 'rgb(230,220,10)' },
-        { filename: 'data/zipfel/dsRED.csv', name: 'dsRED (Z)', color: 'rgb(200,20,44)' },
-        { filename: 'data/drobizhev/EBFP2_0_w.csv', name: 'eBFP (D)', color: 'rgb(0,0,230)' },
-        { filename: 'data/drobizhev/EGFP_average_w.csv', name: 'eGFP (D)', color: 'rgb(44,160,44)' },
-        { filename: 'data/drobizhev/ECFP_w.csv', name: 'eCFP (D)', color: 'rgb(10,190,194)' },
-        { filename: 'data/drobizhev/citrine_w.csv', name: 'citrine_w (D)', color: 'rgb(0,190,44)' },
-        { filename: 'data/drobizhev/tdTomato_w.csv', name: 'tdTomato (D)', color: 'rgb(200,50,44)' },
-        { filename: 'data/drobizhev/mCherry_w.csv', name: 'mCherry (D)', color: 'rgb(255, 192, 203)' },];
+        { filename: 'data/zipfel/Alexa488.csv', name: 'AF488 (Z)', marker: 'circle', color: 'rgb(49,130,189)' },
+        { filename: 'data/zipfel/Alexa568.csv', name: 'AF568 (Z)', marker: 'circle', color: 'rgb(255,127,14)' },
+        { filename: 'data/zipfel/Alexa594.csv', name: 'AF594 (Z)', marker: 'circle', color: 'rgb(255,127,14)' },
+        { filename: 'data/zipfel/eGFP.csv', name: 'eGFP (Z)', marker: 'circle', color: 'rgb(44,160,44)' },
+        { filename: 'data/zipfel/YFP.csv', name: 'YFP (Z)', marker: 'circle', color: 'rgb(230,220,10)' },
+        { filename: 'data/zipfel/dsRED.csv', name: 'dsRED (Z)', marker: 'circle', color: 'rgb(200,20,44)' },
+        { filename: 'data/drobizhev/EBFP2_0_w.csv', name: 'eBFP (D)', marker: 'square', color: 'rgb(0,0,230)' },
+        { filename: 'data/drobizhev/EGFP_average_w.csv', name: 'eGFP (D)', marker: 'square', color: 'rgb(44,160,44)' },
+        { filename: 'data/drobizhev/ECFP_w.csv', name: 'eCFP (D)', marker: 'square', color: 'rgb(10,190,194)' },
+        { filename: 'data/drobizhev/citrine_w.csv', name: 'citrine_w (D)', marker: 'square', color: 'rgb(0,190,44)' },
+        { filename: 'data/drobizhev/tdTomato_w.csv', name: 'tdTomato (D)', marker: 'square', color: 'rgb(200,50,44)' },
+        { filename: 'data/drobizhev/mCherry_w.csv', name: 'mCherry (D)', marker: 'square', color: 'rgb(255, 192, 203)' },];
 
 
 
@@ -104,7 +104,6 @@
           },
           showlegend: true,
       };
-
 
       // Read in the data using the dictionary and build new dictionary containing data
       // from all files
