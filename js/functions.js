@@ -35,11 +35,12 @@ function readAllFilesIntoStructure(fileDict) {
             const trace = {
               x: data.x,
               y: data.y,
-              type: 'line',
+              mode: 'lines+markers',
               name: file.name,
               marker: {
                 color: file.color,
-                opacity: 0.7,
+                opacity: 0.75,
+                symbol: file.marker,
               }
             };
             return trace;
