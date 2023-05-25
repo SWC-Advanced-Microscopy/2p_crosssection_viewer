@@ -1,19 +1,19 @@
 <!DOCTYPE html>
-<html>
+
+<html lang="en">
 <head>
-    <style>
-      /* Define CSS styles */
-      body {
-        font-family: Arial, sans-serif;
-      }
-      html, body {
-      height: 100%;
-      margin: 10px;
-      padding: 10px;
-    }
-    </style>
+
+    <meta charset="utf-8">
+    <meta name="description" content="Two-photon cross-section interactive graph">
+    <meta name="author" content="Rob Campbell">
+
+
+    <link rel="stylesheet" href="xsection.css" />
+
     <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
 </head>
+
+
 <body>
     <div style="position: relative; display: inline-block; width: 90%; height: 85vh;" id="chart"></div>
     <br />
@@ -44,6 +44,12 @@
       The curves are stored in named sub-directories so their origin is clear.
     </p>
 
+    <h3>Emission spectra</h3>
+    <ul>
+      <li><a href="https://www.chroma.com/spectra-viewer?fluorochromes=27215%2C10392%2C27065&parts=26208%2C25306%2C24198%2C25704">eBFP2, eGFP, tdTomato. With emission filters</a></li>
+      <li><a href="https://www.chroma.com/spectra-viewer?fluorochromes=27215%2C10392%2C27060%2C27065&parts=26208%2C25306%2C24198%2C25704">eBFP2, eGFP, tdTomato, mCherry. With emission filters</a></li>
+    </ul>
+
     <h3>References</h3>
     <ul>
       <li><a href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC4772972/?report=reader">Drobizhev, 2011</a></li>
@@ -52,56 +58,12 @@
       &nbsp;
     </p>
     </div>
-    <script>
 
-        // Function for reading spectra from csv file
-        function readDataFromFile(filePath) {
-            return fetch(filePath)
-                .then(response => response.text())
-                .then(data => {
-                    const lines = data.split('\n');
-                    const xData = [];
-                    const yData = [];
+    <script src="js/functions.js"></script>
+    <script type="text/javascript">
 
-                    lines.forEach(line => {
-                        const [x, y] = line.split(',');
-                        xData.push(x);
-                        yData.push(parseFloat(y));
-                    });
 
-                    return { x: xData, y: yData };
-                })
-                .catch(error => {
-                    console.error('Error fetching data:', error);
-                });
-        }
-
-        // Plot properties
-        var layout = {
-          title: '2-p cross sections of commonly used dyes',
-              xaxis: {
-                title: {
-                    text: 'Wavelength (nm)',
-                },
-                mirror: true,
-                showline: true,
-                range: [750, 1020],
-                tickangle: -45,
-                ticks:'outside',
-            },
-            yaxis: {
-                title: {
-                    text: 'GM',
-                },
-                mirror: true,
-                showline: true,
-                range: [0,250],
-                ticks:'outside',
-            },
-            showlegend: true,
-          };
-
-      // Files to read, their names, and colours
+      // Files to read, their names, and colors
       const files = [
         { filename: 'data/zipfel/Alexa488.csv', name: 'AF488 (Z)', color: 'rgb(49,130,189)' },
         { filename: 'data/zipfel/Alexa568.csv', name: 'AF568 (Z)', color: 'rgb(255,127,14)' },
@@ -118,106 +80,47 @@
 
 
 
-      const promises = [];
+      // Plot properties
+      var layout = {
+        title: '2-p cross sections of commonly used dyes',
+            xaxis: {
+              title: {
+                  text: 'Wavelength (nm)',
+              },
+              mirror: true,
+              showline: true,
+              range: [750, 1020],
+              tickangle: -45,
+              ticks:'outside',
+          },
+          yaxis: {
+              title: {
+                  text: 'GM',
+              },
+              mirror: true,
+              showline: true,
+              range: [0,250],
+              ticks:'outside',
+          },
+          showlegend: true,
+      };
 
-      // Read data from each file and store the promises
-      for (const file of files) {
-        const promise = readDataFromFile(file.filename)
-          .then(data => {
-            const trace = {
-              x: data.x,
-              y: data.y,
-              type: 'line',
-              name: file.name,
-              marker: {
-                color: file.color,
-                opacity: 0.7,
-              }
-            };
-            return trace;
-          });
 
-        promises.push(promise);
-      }
+      // Read in the data using the dictionary and build new dictionary containing data
+      // from all files
+      DATA = readAllFilesIntoStructure(files)
 
-    // Wait for all promises to be resolved
-    Promise.all(promises)
-      .then(traces => {
-        // Plot all the traces
-        Plotly.newPlot('chart', traces, layout);
-      })
-      .catch(error => {
+
+      Promise.all(DATA)
+        .then(traces => {
+          // Plot all the traces
+          Plotly.newPlot('chart', traces, layout);
+        })
+        .catch(error => {
         console.error('Error reading data:', error);
       });
 
-
-
-    // The following functions define button behavior
-    function removeAllTraces() {
-      // Get the current number of traces
-      const numTraces = document.getElementById('chart').data.length;
-
-      // Update the trace visibility individually
-      for (let i = 0; i < numTraces; i++) {
-        Plotly.restyle('chart', 'visible', 'legendonly', [i]);
-      }
-    }
-
-    function showAllTraces() {
-      const chart = document.getElementById('chart');
-      const numTraces = chart.data.length;
-
-      for (let i = 0; i < numTraces; i++) {
-        Plotly.restyle(chart, 'visible', true, [i]);
-      }
-    }
-
-
-    function enableAlexa() {
-      const numTraces = document.getElementById('chart').data.length;
-
-      // Create an array of false values with the same length as the number of traces
-      const visibility = new Array(numTraces).fill(false);
-
-      // Enable only elements 1 and 3 by setting their corresponding indices to true
-      visibility[0] = true;
-      visibility[1] = true;
-      visibility[2] = true;
-      // Update the trace visibility individually
-      for (let i = 0; i < numTraces; i++) {
-        Plotly.restyle('chart', 'visible', visibility[i], [i]);
-      }
-    }
-
-    function enableDrobizhev() {
-      const numTraces = document.getElementById('chart').data.length;
-      const visibility = new Array(numTraces).fill(false);
-      visibility[6] = true;
-      visibility[7] = true;
-      visibility[8] = true;
-      visibility[9] = true;
-      visibility[10] = true;
-      visibility[11] = true;
-      // Update the trace visibility individually
-      for (let i = 0; i < numTraces; i++) {
-        Plotly.restyle('chart', 'visible', visibility[i], [i]);
-      }
-    }
-    function enableZipfel() {
-      const numTraces = document.getElementById('chart').data.length;
-      const visibility = new Array(numTraces).fill(false);
-      visibility[0] = true;
-      visibility[1] = true;
-      visibility[2] = true;
-      visibility[3] = true;
-      visibility[4] = true;
-      visibility[5] = true;
-      // Update the trace visibility individually
-      for (let i = 0; i < numTraces; i++) {
-        Plotly.restyle('chart', 'visible', visibility[i], [i]);
-      }
-    }
-
     </script>
+
 </body>
 </html>
