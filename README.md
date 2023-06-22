@@ -29,4 +29,3 @@ Start the web server:
 * Navigate to the folder where your HTML file is located using the command prompt or terminal.
 * Start the web server in that directory: `python -m http.server` (`-m` runs a library or module as a script)
 * Access the HTML file through the local web server: Open your web browser and visit [http://localhost:8000](http://localhost:8000) 
-
